@@ -19,6 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
 				const getterMethod = new vscode.CompletionItem(property.generateMethodName('get'), vscode.CompletionItemKind.Method);
 				getterMethod.insertText = snippet;
 				getterMethod.detail = `public function ${property.generateMethodName('get')}`;
+				getterMethod.documentation = snippet.value.replace(new RegExp(/\\/, 'gm'), '');
 
 				getterMethods.push(getterMethod);
 			});
@@ -42,6 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
 				const setterMethod = new vscode.CompletionItem(property.generateMethodName('set'), vscode.CompletionItemKind.Method);
 				setterMethod.insertText = snippet;
 				setterMethod.detail = `public function ${property.generateMethodName('set')}{...}`;
+				setterMethod.documentation = snippet.value.replace(new RegExp(/\\/, 'gm'), '');
 
 				setterMethods.push(setterMethod);
 			});
