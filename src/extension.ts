@@ -2,55 +2,54 @@ import * as vscode from 'vscode';
 import Property from './Property';
 
 export function activate(context: vscode.ExtensionContext) {
-	const methodsForPropertiesProvider = vscode.languages.registerCompletionItemProvider(
-		'php',
-		{
-			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+	const properties = Property.findAll();
 
-				// Make sure we want to add getter methods
-				const linePrefix = document.lineAt(position).text.substr(0, position.character);
-				if (!linePrefix.endsWith('get')) {
-					// return undefined;
-				}
+	const getterMethods = vscode.languages.registerCompletionItemProvider('php', {
+		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+			// Gather all the getter methods based on the available properties
+			let getterMethods: vscode.CompletionItem[] = [];
 
-				let newMethods: any = [];
+			properties.forEach(property => {
+				const snippet = new vscode.SnippetString();
+				snippet.appendText(`public function ${property.generateMethodName('get')}(): ${property.getType()}`);
+				snippet.appendText("\n{");
+				snippet.appendText(`\n\treturn $this->${property.getName()};`);
+				snippet.appendText("\n}");
 
-				Property.findAll().forEach(property => {
-					newMethods.push(new vscode.CompletionItem(property.generateMethodName('get'), vscode.CompletionItemKind.Method));
-				});
+				const getterMethod = new vscode.CompletionItem(property.generateMethodName('get'), vscode.CompletionItemKind.Method);
+				getterMethod.insertText = snippet;
+				getterMethod.detail = `public function ${property.generateMethodName('get')}`;
 
-				return newMethods;
-				
-				// // Get the active text editor
-				// const editor = vscode.window.activeTextEditor;
-				// if (!editor) {
-				// 	return undefined;
-				// }
+				getterMethods.push(getterMethod);
+			});
 
-				// // Find properties defined in classes
-				// const classPropertyMatches = editor.document.getText().matchAll(
-				// 	new RegExp(/public [a-zA-Z]* \$(?<property>[a-zA-Z]*);/, "gm")
-				// );
-				
-				// let newMethods = [];
+			return getterMethods;
+		}
+	});
 
-				// for (const classPropertyMatch of classPropertyMatches) {
-				// 	const classPropertyMatchName = classPropertyMatch?.groups?.property;
+	const setterMethods = vscode.languages.registerCompletionItemProvider('php', {
+		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+			// Gather all the setter methods based on the available properties
+			let setterMethods: vscode.CompletionItem[] = [];
 
-				// 	// Make sure we have a property name
-				// 	if (!classPropertyMatchName) {
-				// 		continue;
-				// 	}
+			properties.forEach(property => {
+				const snippet = new vscode.SnippetString();
+				snippet.appendText(`public function ${property.generateMethodName('set')}(${property.getType()} $${property.getName()}): void`);
+				snippet.appendText("\n{");
+				snippet.appendText(`\n\t$this->${property.getName()} = $${property.getName()};`);
+				snippet.appendText("\n}");
 
-				// 	const propertyName = classPropertyMatchName.charAt(0).toUpperCase() + classPropertyMatchName.slice(1);
+				const setterMethod = new vscode.CompletionItem(property.generateMethodName('set'), vscode.CompletionItemKind.Method);
+				setterMethod.insertText = snippet;
+				setterMethod.detail = `public function ${property.generateMethodName('set')}{...}`;
 
-				// 	newMethods.push(new vscode.CompletionItem('get' + propertyName, vscode.CompletionItemKind.Method));
-				// };
+				setterMethods.push(setterMethod);
+			});
 
-				// return newMethods;
-			}
-		},
-	);
+			return setterMethods;
+		}
+	});
 
-	context.subscriptions.push(methodsForPropertiesProvider);
+	context.subscriptions.push(getterMethods);
+	context.subscriptions.push(setterMethods);
 }
