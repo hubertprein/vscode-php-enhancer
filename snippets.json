@@ -1,0 +1,73 @@
+{
+    "public function __construct(){...}": {
+        "prefix": "__construct",
+        "body": [
+            "public function __construct(",
+            "\t${1:protected Type \\$var}",
+            ") {",
+            "\t$LINE_COMMENT$0",
+            "}"
+        ],
+        "description": "Class constructor"
+    },
+    "public function": {
+        "prefix": "pubf",
+        "body": [
+            "public function ${1:functionName}($2)",
+            "{",
+            "\t$0",
+            "}"
+        ],
+        "description": "Public function"
+    },
+    "public static function": {
+        "prefix": "pubsf",
+        "body": [
+            "public static function ${1:functionName}($2)",
+            "{",
+            "\t$0",
+            "}"
+        ],
+        "description": "Public static function"
+    },
+    "protected function": {
+        "prefix": "prof",
+        "body": [
+            "protected function ${1:functionName}($2)",
+            "{",
+            "\t$0",
+            "}"
+        ],
+        "description": "Protected function"
+    },
+    "protected static function": {
+        "prefix": "prosf",
+        "body": [
+            "protected static function ${1:functionName}($2)",
+            "{",
+            "\t$0",
+            "}"
+        ],
+        "description": "Protected static function"
+    },
+    "private function": {
+        "prefix": "prif",
+        "body": [
+            "private function ${1:functionName}($2)",
+            "{",
+            "\t$0",
+            "}"
+        ],
+        "description": "Private function"
+    },
+    "private static function": {
+        "prefix": "prisf",
+        "body": [
+            "private static function ${1:functionName}($2)",
+            "{",
+            "\t$0",
+            "}"
+        ],
+        "description": "Private static function"
+    }
+}
