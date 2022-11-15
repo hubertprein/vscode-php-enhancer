@@ -16,7 +16,7 @@ export function activate(context: vscode.ExtensionContext) {
 				snippet.appendText(`\n\treturn $this->${property.getName()};`);
 				snippet.appendText("\n}");
 
-				const getterMethod = new vscode.CompletionItem(property.generateMethodName('get'), vscode.CompletionItemKind.Method);
+				const getterMethod = new vscode.CompletionItem(property.generateMethodName('get'), vscode.CompletionItemKind.Snippet);
 				getterMethod.insertText = snippet;
 				getterMethod.detail = `public function ${property.generateMethodName('get')}`;
 				getterMethod.documentation = snippet.value.replace(new RegExp(/\\/, 'gm'), '');
@@ -40,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
 				snippet.appendText(`\n\t$this->${property.getName()} = $${property.getName()};`);
 				snippet.appendText("\n}");
 
-				const setterMethod = new vscode.CompletionItem(property.generateMethodName('set'), vscode.CompletionItemKind.Method);
+				const setterMethod = new vscode.CompletionItem(property.generateMethodName('set'), vscode.CompletionItemKind.Snippet);
 				setterMethod.insertText = snippet;
 				setterMethod.detail = `public function ${property.generateMethodName('set')}{...}`;
 				setterMethod.documentation = snippet.value.replace(new RegExp(/\\/, 'gm'), '');
