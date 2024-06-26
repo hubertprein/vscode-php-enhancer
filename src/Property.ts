@@ -35,26 +35,22 @@ export default class Property {
             const propertyMatchVisibility = propertyMatch?.groups?.visibility;
 
             // Make sure we have a clear property
-            if (!propertyMatchName|| !propertyMatchType || !propertyMatchVisibility) {
+            if (!propertyMatchName || !propertyMatchType || !propertyMatchVisibility) {
                 continue;
             }
 
             properties.push(
-                new Property(
-                    propertyMatchName,
-                    propertyMatchType,
-                    propertyMatchVisibility
-                )
+                new Property(propertyMatchName, propertyMatchType, propertyMatchVisibility)
             );
         }
 
         return properties;
     }
-    
+
     public getName(): string {
         return this.name;
     }
-    
+
     public getType(): string | null {
         return this.type;
     }
